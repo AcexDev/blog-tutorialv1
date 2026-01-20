@@ -1,0 +1,101 @@
+// In the Terminal:
+-django-admin: list all commands
+-django-admin startproject 'projectname' - to setup project
+-python manage.py runserver - run your newly created project vanilla without any apps 
+
+-python manage.py startapp 'app-name' - to setup app
+
+//Templates
+To link templates, copy the class name from yourapp.apps then add to installed apps in settings.py under main project
+
+// Datbase
+python manage.py makemigrations - stage changes for push to db
+python manage.py migrate - commit changes to db
+
+// Admin
+pyton manage.py createsuperuser - Create Super Admin
+
+//Setting up DB models
+-Create your db class model in 'your app'/models.py
+-Make migrations
+-python manage.py sqlmigrate blog 0001 - to view raw sql migrate code
+
+//Using the Shell to run commands
+-python manage.py shell - to run python commands in the Terminal
+
+-from blog.models import Post
+ from django.contrib.auth.models import User
+ Users.objects.all()   - to fetch all registered Users
+ Users.objects.first() - to fetch first User
+
+ User.objects.filter(username = 'Acex')         - To filter by username
+ User.objects.filter(username = 'Acex').first()
+
+ user = User.objects.get(id=1) - get method
+
+ Post.objects.all()- to all existing posts by the active user
+
+// Creating posts
+post_1 = Post(title='Blog 1', content='First Post Content!', author = user)
+post_1.save()
+
+user.post_set.create(title='Blog 3', content='Third Post Content!')
+
+//Fetching posts
+user.post_set.all() - get allposts for a sepcific user
+
+//Adding to admin
+admin.site.register(Post) - To activate post menu in admin page
+
+/// Always remember to add a new newly created apps to te installed apps list in settings
+
+// FORMS
+csrf - Cross-Site Request Forgery
+
+//pip install django-crispy-forms: To Install crispy forms
+pip install crispy_bootstrap4: Install bootstrap4
+Add to apps:
+'crispy_forms',
+'crispy_bootstrap4',
+Bottomof settings.py, add:
+CRISPY_TEMPLATE_PACK = 'bootstrap4': To change to bootstrap 4
+CRISPY_ALLOWED_TEMPLATES_PACKS = 'bootstrap4'
+
+// LOGIN
+LOGIN_REDIRECT_URL = 'blog-home' - TO LINK Homepage to redirect to after login
+
+CHECK STEPS FOR LOGOUT IN NAVBAR UNDER BASE.HTML
+
+//PROFILE
+-The login_required decorator should be used on the profile function in views to ensure only logged in users can access the profile page
+-Set LOGIN_URL ='login' in settings
+
+-Create model for profile in users
+-Install Pillow if image field doesn't allow for migrations
+-Set media roots and url in settings
+-Create save method in models.profile to resize images for efficiency
+-Set up your profile template
+-Also make urlpatterns changes in project/urls.py
+-Create your signal in users
+-Create a ready function for signals in apps.py under users
+
+//PROFILE UPDATE
+-Create UserUpdateForm and ProfileUpdateForm in users/forms.py
+-Add them to the profile function in views and load them into the template
+-Remember to add existing instances when calling the form objects
+-Set all form checks, validation,and saving
+-Update the profile template(profile.html) to include the fields
+
+
+// CRUD on posts
+-Use cLass-based views
+-Define specific classes in app/views
+-Pass them in the url.py
+-Create List, Details and Create View
+-Remeber to validate the create posts method and set author to the current user
+-Also add post id to the post title url in the home template
+-Pass LoginMixin to the CreateView class to ensure only logged in users can access the create post page
+-Also pass UserPassesTestMixin to the Update object to prevent users from updating posts they didn't author
+-Add success url to deleteview to choose page to map to after deletion
+
+-If account creation throws up force_insert error, pass args and kwargs in Profile.save()
